@@ -4,12 +4,21 @@ import { useAuth } from "../context/AuthContext";
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
 
-  // ❌ Not Logged In → Redirect to Login
+  // ✅ While checking auth from localStorage, wait
+  if (user === null) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-lg">
+        Checking authentication...
+      </div>
+    );
+  }
+
+  // ❌ Not Logged In
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  // ✅ Logged In → Allow Access
+  // ✅ Logged In
   return children;
 };
 
