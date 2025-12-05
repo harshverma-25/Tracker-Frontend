@@ -94,7 +94,18 @@ const DSASheets = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -8 }}
-                onClick={() => navigate(`/sheet/${sheet._id}`)}
+
+                
+                onClick={() => {
+                const token = localStorage.getItem("token");
+
+                if (!token) {
+                  navigate("/login");
+                } else {
+                  navigate(`/sheet/${sheet._id}`);
+                }
+              }}
+
                 className="group cursor-pointer bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl overflow-hidden transition-all duration-300"
               >
                 {/* Difficulty Badge */}
