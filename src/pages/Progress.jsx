@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom"; // Add this import
 
 const Progress = () => {
   const [progress, setProgress] = useState([]);
@@ -53,11 +54,6 @@ const Progress = () => {
     fetchAllData();
   }, [token]);
 
-  // ✅ OVERALL CALCULATION
-  const total = progress.length;
-  const solved = progress.filter((p) => p.isSolved).length;
-  const percent = total === 0 ? 0 : Math.round((solved / total) * 100);
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-xl text-white">
@@ -69,15 +65,14 @@ const Progress = () => {
   return (
     <div className="min-h-screen px-6 py-12 bg-[var(--color-bg)] text-[var(--color-text)]">
       {/* ✅ PAGE TITLE */}
-
-   
-
-  
+      <h1 className="text-3xl font-bold text-center mb-10">
+        📊 Your Progress Overview
+      </h1>
 
       {/* ✅ ✅ ✅ SHEET-WISE PROGRESS */}
       <div className="max-w-5xl mx-auto space-y-8">
         <h2 className="text-2xl font-bold mb-4 text-center">
-          📂 Sheet-wise Progress
+          📂 Click on a Sheet for Detailed Progress
         </h2>
 
         {sheets.map((sheet) => {
@@ -97,31 +92,44 @@ const Progress = () => {
               : Math.round((solvedSheetQ / totalSheetQ) * 100);
 
           return (
-            <div
+            <Link
               key={sheet._id}
-              className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-5 shadow-[var(--shadow-soft)]"
+              to={`/progress/${sheet._id}`}
+              className="block cursor-pointer"
             >
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold text-lg">
-                  {sheet.title}
-                </h3>
+              <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-5 shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-hard)] hover:border-[var(--color-accent)] transition-all duration-300">
+                <div className="flex justify-between items-center mb-2">
+                  <div>
+                    <h3 className="font-semibold text-lg">
+                      {sheet.title}
+                    </h3>
+                    <p className="text-sm text-[var(--color-muted)] mt-1">
+                      {sheet.description || "Click to view detailed progress"}
+                    </p>
+                  </div>
 
-                <span className="text-sm text-[var(--color-muted)]">
-                  {solvedSheetQ}/{totalSheetQ} solved
-                </span>
+                  <span className="text-sm text-[var(--color-muted)]">
+                    {solvedSheetQ}/{totalSheetQ} solved
+                  </span>
+                </div>
+
+                <div className="w-full bg-[var(--color-border)] rounded-full h-3 overflow-hidden">
+                  <div
+                    className="h-3 bg-gradient-to-r from-green-400 to-[var(--color-accent)] transition-all duration-700"
+                    style={{ width: `${sheetPercent}%` }}
+                  />
+                </div>
+
+                <div className="flex justify-between items-center mt-1">
+                  <p className="text-xs text-[var(--color-muted)]">
+                    {sheetPercent}% completed
+                  </p>
+                  <span className="text-xs text-[var(--color-accent)]">
+                    Click for details →
+                  </span>
+                </div>
               </div>
-
-              <div className="w-full bg-[var(--color-border)] rounded-full h-3 overflow-hidden">
-                <div
-                  className="h-3 bg-gradient-to-r from-green-400 to-[var(--color-accent)] transition-all duration-700"
-                  style={{ width: `${sheetPercent}%` }}
-                />
-              </div>
-
-              <p className="text-xs text-[var(--color-muted)] mt-1">
-                {sheetPercent}% completed
-              </p>
-            </div>
+            </Link>
           );
         })}
       </div>

@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import AdminAllSheets from "./pages/AdminAllSheets";
 import DSASheets from "./pages/DSASheets";
+import SheetProgress from './components/SheetProgress';
 
 
 
@@ -37,6 +38,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/progress/:sheetId" element={<SheetProgress />} />
 
         <Route
           path="/bookmarks"
